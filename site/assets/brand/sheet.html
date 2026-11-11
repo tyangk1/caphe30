@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../css/fonts.css">
+<style>
+  :root { --bg: #0E0907; --cream: #F3EADB; --gold: #C9A24B; --coffee: #8a5530; }
+  body { margin: 0; background: #1a1411; font-family: 'Be Vietnam Pro', sans-serif; color: var(--cream); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+  .cell { height: 420px; display: grid; place-items: center; position: relative; }
+  .dark { background: var(--bg); } .light { background: #F3EADB; color: #1E120C; }
+  .tag { position: absolute; left: 18px; top: 16px; font: 600 12px/1 'Be Vietnam Pro'; letter-spacing: .2em; opacity: .6; }
+  .lock { display: flex; align-items: center; gap: 22px; }
+  .word { font: 800 64px/0.9 'Bricolage Grotesque'; letter-spacing: -.03em; }
+  .sub { font: 600 13px/1 'Be Vietnam Pro'; letter-spacing: .26em; margin-top: 12px; color: var(--gold); }
+  .light .sub { color: #8E5A2A; }
+  svg { display: block; }
+</style></head><body>
+<!-- the three directions, each on dark (the site) and light (print, social) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- A: a coffee drop with a bean's S-crease cut through it -->
+    <symbol id="drop" viewBox="0 0 100 120">
+      <path d="M50 4 C50 4 14 52 14 78 A36 36 0 0 0 86 78 C86 52 50 4 50 4 Z" fill="currentColor"/>
+      <path d="M50 52 C36 64 64 86 50 104" fill="none" stroke="var(--cut)" stroke-width="7" stroke-linecap="round"/>
+    </symbol>
+  </defs>
+</svg>
+<div class="grid">
+  <div class="cell dark" id="A-dark"><span class="tag">A · GIỌT-HẠT</span>
+    <div class="lock"><svg width="86" height="104" style="color:#F3EADB;--cut:#0E0907"><use href="#drop"/></svg>
+      <div><div class="word">MỘT GIỌT</div><div class="sub">30 NĂM · 1996–2026</div></div></div></div>
+  <div class="cell dark" id="B-dark"><span class="tag">B · 3 + GIỌT</span>
+    <div class="lock" style="gap:6px"><div class="word" style="font-size:150px;line-height:.8">3</div>
+      <svg width="104" height="125" style="color:#C9A24B;--cut:#0E0907;margin-top:6px"><use href="#drop"/></svg>
+      <div style="margin-left:18px"><div class="word" style="font-size:40px">MỘT<br>GIỌT</div><div class="sub">1996–2026</div></div></div></div>
+  <div class="cell dark" id="C-dark"><span class="tag">C · DẤU LY</span>
+    <svg width="300" height="300" viewBox="0 0 300 300">
+      <defs><path id="ring" d="M150 150 m-112 0 a112 112 0 1 1 224 0 a112 112 0 1 1 -224 0"/></defs>
+      <circle cx="150" cy="150" r="138" fill="none" stroke="#F3EADB" stroke-width="3"/>
+      <circle cx="150" cy="150" r="88" fill="#3a1d0c"/>
+      <text font-family="Bricolage Grotesque" font-weight="800" font-size="74" fill="#F3EADB" text-anchor="middle" x="150" y="176" letter-spacing="-3">30</text>
+      <text font-family="Be Vietnam Pro" font-weight="600" font-size="15" fill="#C9A24B" letter-spacing="5.2"><textPath href="#ring">MỘT GIỌT · 1996 — 2026 · MỘT GIỌT · 1996 — 2026 ·</textPath></text>
+    </svg></div>
+  <div class="cell light" id="A-light"><span class="tag">A · GIỌT-HẠT</span>
+    <div class="lock"><svg width="86" height="104" style="color:#3a1d0c;--cut:#F3EADB"><use href="#drop"/></svg>
+      <div><div class="word">MỘT GIỌT</div><div class="sub">30 NĂM · 1996–2026</div></div></div></div>
+  <div class="cell light" id="B-light"><span class="tag">B · 3 + GIỌT</span>
+    <div class="lock" style="gap:6px"><div class="word" style="font-size:150px;line-height:.8">3</div>
+      <svg width="104" height="125" style="color:#8E5A2A;--cut:#F3EADB;margin-top:6px"><use href="#drop"/></svg>
+      <div style="margin-left:18px"><div class="word" style="font-size:40px">MỘT<br>GIỌT</div><div class="sub">1996–2026</div></div></div></div>
+  <div class="cell light" id="C-light"><span class="tag">C · DẤU LY</span>
+    <svg width="300" height="300" viewBox="0 0 300 300">
+      <defs><path id="ring2" d="M150 150 m-112 0 a112 112 0 1 1 224 0 a112 112 0 1 1 -224 0"/></defs>
+      <circle cx="150" cy="150" r="138" fill="none" stroke="#1E120C" stroke-width="3"/>
+      <circle cx="150" cy="150" r="88" fill="#3a1d0c"/>
+      <text font-family="Bricolage Grotesque" font-weight="800" font-size="74" fill="#F3EADB" text-anchor="middle" x="150" y="176" letter-spacing="-3">30</text>
+      <text font-family="Be Vietnam Pro" font-weight="600" font-size="15" fill="#8E5A2A" letter-spacing="5.2"><textPath href="#ring2">MỘT GIỌT · 1996 — 2026 · MỘT GIỌT · 1996 — 2026 ·</textPath></text>
+    </svg></div>
+</div>
+<div class="grid" style="margin-top:2px">
+  <div class="cell dark" style="height:200px"><span class="tag">A · 32 PX</span><div style="display:flex;gap:24px;align-items:end">
+    <svg width="16" height="19" style="color:#F3EADB;--cut:#0E0907"><use href="#drop"/></svg><svg width="32" height="38" style="color:#F3EADB;--cut:#0E0907"><use href="#drop"/></svg><svg width="64" height="77" style="color:#F3EADB;--cut:#0E0907"><use href="#drop"/></svg></div></div>
+  <div class="cell dark" style="height:200px"><span class="tag">B · 32 PX</span><div style="display:flex;gap:24px;align-items:end">
+    <svg width="16" height="19" style="color:#C9A24B;--cut:#0E0907"><use href="#drop"/></svg><svg width="32" height="38" style="color:#C9A24B;--cut:#0E0907"><use href="#drop"/></svg><svg width="64" height="77" style="color:#C9A24B;--cut:#0E0907"><use href="#drop"/></svg></div></div>
+  <div class="cell dark" style="height:200px"><span class="tag">C · 32 PX</span><div style="display:flex;gap:24px;align-items:end">
+    <svg width="16" height="16" viewBox="0 0 300 300"><circle cx="150" cy="150" r="138" fill="none" stroke="#F3EADB" stroke-width="16"/><circle cx="150" cy="150" r="88" fill="#3a1d0c"/></svg>
+    <svg width="32" height="32" viewBox="0 0 300 300"><circle cx="150" cy="150" r="138" fill="none" stroke="#F3EADB" stroke-width="10"/><circle cx="150" cy="150" r="88" fill="#3a1d0c"/><text font-family="Bricolage Grotesque" font-weight="800" font-size="90" fill="#F3EADB" text-anchor="middle" x="150" y="182">30</text></svg>
+    <svg width="64" height="64" viewBox="0 0 300 300"><circle cx="150" cy="150" r="138" fill="none" stroke="#F3EADB" stroke-width="6"/><circle cx="150" cy="150" r="88" fill="#3a1d0c"/><text font-family="Bricolage Grotesque" font-weight="800" font-size="80" fill="#F3EADB" text-anchor="middle" x="150" y="178">30</text></svg></div></div>
+</div>
+</body></html>

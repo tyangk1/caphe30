@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Một giọt · 30 năm cà phê (concept)</title>
+<meta name="description" content="Concept thiết kế lại không chính thức của Artboard One: cuộn hết trang là pha xong một ly cà phê. 30 năm, từ đất đỏ Buôn Ma Thuột đến ly phin.">
+<meta property="og:title" content="Một giọt · 30 năm cà phê (concept)">
+<meta property="og:description" content="Cuộn hết trang là pha xong một ly. Concept thiết kế lại không chính thức của Artboard One.">
+<meta property="og:image" content="https://caphe30.yan.io.vn/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0E0907">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/site.css">
+<script type="importmap">{ "imports": { "three": "./vendor/three/three.module.min.js", "lenis": "./vendor/lenis/lenis.js" } }</script>
+</head>
+<body>
+<a id="logo" href="#" aria-label="Một giọt, về đầu trang"><span class="three">3</span><img src="assets/brand/mark.svg" alt="" width="20" height="24"><span class="w">MỘT GIỌT</span></a>
+<div id="bg-dat" aria-hidden="true"><picture><source media="(max-width: 760px)" srcset="assets/img/dat-do-m.webp"><img src="assets/img/dat-do.webp" alt=""></picture></div>
+<canvas id="gl" aria-hidden="true"></canvas>
+<div id="flyers" aria-hidden="true"></div>
+<img id="phin" src="assets/img/phin.webp" alt="" aria-hidden="true">
+<img id="sachet" src="assets/img/goi-xe.webp" alt="" aria-hidden="true">
+
+<!-- copy, one block per chapter, shown by the timeline -->
+<main id="copy">
+  <section class="beat" data-beat="hero">
+    <h1 class="mega"><span>30 năm.</span><span>Từ một giọt.</span></h1>
+    <p class="kicker">Trung Nguyên Legend · 1996–2026</p>
+    <p class="hint">Cuộn để pha</p>
+  </section>
+
+  <section class="beat side" data-beat="dat">
+    <p class="kicker">01 · Đất</p>
+    <h2>Buôn Ma Thuột, 1996</h2>
+    <p>Ngày 16/6/1996, Trung Nguyên bắt đầu ở Buôn Ma Thuột, vùng đất đỏ bazan được gọi là thủ phủ cà phê của Việt Nam.</p>
+  </section>
+
+  <section class="beat side" data-beat="lua">
+    <p class="kicker">02 · Lửa</p>
+    <h2>Rang</h2>
+    <p>Nhân xanh vào lồng rang. Tới khoảng 196°C, hạt nổ lần một: hơi nước thoát ra, vỏ lụa bong, hương bắt đầu thành hình.</p>
+  </section>
+
+  <section class="beat side recipe" data-beat="recipe">
+    <p class="kicker"><span id="r-k">01 / 05</span> · Sáng Tạo</p>
+    <h2 id="r-h">Sáng Tạo 1</h2>
+    <p id="r-p"></p>
+  </section>
+
+  <section class="beat side" data-beat="nuoc">
+    <p class="kicker">03 · Nước</p>
+    <h2>Pha phin</h2>
+    <p>Hạt xay vào phin, nước sôi rót chậm. Từng giọt rơi xuống, đủ thời gian cho một ly đậm.</p>
+  </section>
+
+  <section class="beat end" data-beat="sua">
+    <p class="kicker">04 · Sữa</p>
+    <h2 id="stir-hint">Khuấy thử</h2>
+    <p class="slogan">Cà phê năng lượng – Cà phê đổi đời</p>
+    <a class="cta" id="cta" href="https://trungnguyenlegend.com/" target="_blank" rel="noopener">Xem trang chính thức ↗</a>
+  </section>
+</main>
+
+<!-- milestones rise as bubbles through the coffee -->
+<div id="bubbles" aria-label="Hành trình 30 năm">
+  <div class="bub" data-at="0.22"><img src="assets/img/m1998.webp" alt=""><b>1998</b><span>Quán đầu tiên ở TP.HCM</span></div>
+  <div class="bub" data-at="0.34"><b>2001</b><span>Nhượng quyền sang Nhật Bản và Singapore</span></div>
+  <div class="bub big" data-at="0.46"><img src="assets/img/m2003.webp" alt=""><b>2003</b><span>G7 ra mắt, thắng thử mù 89%</span></div>
+  <div class="bub" data-at="0.6"><b>2016</b><span>Trở thành Trung Nguyên Legend</span></div>
+  <div class="bub" data-at="0.72"><img src="assets/img/m2018.webp" alt=""><b>2018</b><span>Bảo tàng Thế giới Cà phê ở Buôn Ma Thuột</span></div>
+  <div class="bub big" data-at="0.84"><img src="assets/img/m2026.webp" alt=""><b>2026</b><span>30 năm</span></div>
+</div>
+<div id="stir-zone" aria-label="Khuấy ly cà phê"></div>
+<div id="drip" aria-hidden="true"><i></i></div>
+<div id="cursor" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<div id="scroll-track"></div>
+
+<footer id="foot">
+  <p>Concept thiết kế lại không chính thức của <b>Artboard One</b>. Không liên kết với Tập đoàn Trung Nguyên Legend. Trang chính thức: <a href="https://trungnguyenlegend.com/" target="_blank" rel="noopener">trungnguyenlegend.com</a></p>
+  <p class="social"><a href="https://www.youtube.com/@artboard1.studio" target="_blank" rel="noopener">YouTube</a> · <a href="https://www.tiktok.com/@artboard1.studio" target="_blank" rel="noopener">TikTok</a> · <a href="https://www.facebook.com/profile.php?id=61596415862031" target="_blank" rel="noopener">Facebook</a></p>
+</footer>
+
+<!-- no WebGL: a plain, still version of the same story -->
+<noscript><style>#gl,#scroll-track,#drip,#cursor{display:none}#copy .beat{position:static;opacity:1;transform:none;margin:20vh auto}</style></noscript>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
