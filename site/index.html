@@ -20,11 +20,13 @@
 </head>
 <body>
 <a id="logo" href="#" aria-label="Một giọt, về đầu trang"><span class="three">3</span><img src="assets/brand/mark.svg" alt="" width="20" height="24"><span class="w">MỘT GIỌT</span></a>
+<div id="hero" aria-hidden="true"><picture><source media="(max-width: 760px)" srcset="assets/img/hero-phin-m.webp"><img src="assets/img/p-phin-giot-169.webp" alt="" fetchpriority="high"></picture><canvas></canvas></div>
 <div id="bg-dat" aria-hidden="true"><picture><source media="(max-width: 760px)" srcset="assets/img/dat-do-m.webp"><img src="assets/img/dat-do.webp" alt=""></picture></div>
 <canvas id="gl" aria-hidden="true"></canvas>
 <div id="flyers" aria-hidden="true"></div>
-<img id="phin" src="assets/img/phin.webp" alt="" aria-hidden="true">
+<img id="phin" src="assets/img/phin2.webp" alt="" aria-hidden="true">
 <img id="sachet" src="assets/img/goi-xe.webp" alt="" aria-hidden="true">
+<div id="final" aria-hidden="true"><picture><source media="(max-width: 760px)" srcset="assets/img/p-ly-sua-da-toi-m.webp"><img src="assets/img/p-ly-sua-da-toi.webp" alt="" loading="lazy"></picture></div>
 
 <!-- copy, one block per chapter, shown by the timeline -->
 <main id="copy">
@@ -90,6 +92,7 @@
 <!-- no WebGL: a plain, still version of the same story -->
 <noscript><style>#gl,#scroll-track,#drip,#cursor{display:none}#copy .beat{position:static;opacity:1;transform:none;margin:20vh auto}</style></noscript>
 <script defer src="https://stats.yan.io.vn/script.js" data-website-id="d587f2b9-b439-439d-987f-5404ae22655b" data-domains="caphe30.yan.io.vn"></script>
+<script type="module" src="js/hero.js"></script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

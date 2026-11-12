@@ -5,6 +5,9 @@ import Lenis from 'lenis';
 
 const MOBILE = matchMedia('(max-width: 760px)').matches;
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const CAPTURE = location.search.includes('capture');
+const DS = new URLSearchParams(location.search).has('ds') ? +new URLSearchParams(location.search).get('ds') : 1; // swarm scale for capture framing
+const CY_OVERRIDE = new URLSearchParams(location.search).has('cy') ? +new URLSearchParams(location.search).get('cy') : null; // video capture: no smoothing, quicker spoon
 const $ = (s) => document.querySelector(s);
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = (a, b, v) => { const t = clamp((v - a) / (b - a)); return t * t * (3 - 2 * t); };
@@ -42,7 +45,7 @@ const toWorld = (sx, sy, out) => out.set((sx / innerWidth - 0.5) * viewW(), (0.5
 
 // ---------- lenis ----------
 let lenis = null;
-if (!REDUCED) { lenis = new Lenis({ lerp: 0.085, smoothWheel: true }); }
+if (!REDUCED && !CAPTURE) { lenis = new Lenis({ lerp: 0.085, smoothWheel: true }); }
 
 // ---------- textures ----------
 const loader = new THREE.TextureLoader();
@@ -319,8 +322,9 @@ const stirQuad = new THREE.Mesh(quad, stirMat); stirQuad.frustumCulled = false; 
 // ---------- DOM bits ----------
 const beatsEl = Object.fromEntries([...document.querySelectorAll('.beat')].map((b) => [b.dataset.beat, b]));
 const bubbles = [...document.querySelectorAll('.bub')].map((el, i) => ({ el, at: +el.dataset.at, lane: i % 2 }));
+const heroBox = $('#hero');
 const phinEl = $('#phin'), sachet = $('#sachet'), bgDat = $('#bg-dat'), dripDot = $('#drip i'), cursor = $('#cursor'), zone = $('#stir-zone');
-const flyBox = $('#flyers');
+const flyBox = $('#flyers'), finalEl = $('#final');
 const luaH2 = beatsEl.lua.querySelector('h2');
 const FLY = [];
 fetch('assets/flyers.json').then((r) => r.json()).then((f) => {
@@ -425,20 +429,13 @@ function frame(ms) {
   dripDot.style.top = `calc(${p * 100}% - ${p * 11}px)`;
   const W = viewW(), H = viewH();
 
-  // --- hero drop ---
-  const fall = REDUCED ? 1 : clamp((now - 0.3) / 1.25);
-  const sy = -H * 0.3;
-  drop.position.set(0, lerp(H * 0.62, sy, fall * fall), 0); dropHi.position.set(-0.22, drop.position.y + 0.35, 0.6);
-  drop.visible = dropHi.visible = fall < 1;
-  if (fall >= 1 && !landT) { landT = now; splash(); }
-  const heroP = span('hero', p);
-  rings.forEach((r, i) => {
-    const k = landT ? clamp((now - landT - i * 0.3) / 2.8) : 0;
-    r.position.set(0, sy, 0); r.scale.setScalar(0.5 + k * W * 0.6);
-    r.material.opacity = landT ? (1 - k) * 0.5 * (1 - heroP) : 0;
-  });
-  const heroIn = landT ? clamp((now - landT) / 1.1) : 0;
-  beatsEl.hero.style.opacity = heroIn * (1 - smooth(0.02, 0.05, p));
+  // --- hero: the photo plate (js/hero.js) replaced the CG drop and ripples ---
+  drop.visible = dropHi.visible = false;
+  const heroOut = smooth(0.012, 0.055, p);
+  heroBox.style.opacity = 1 - heroOut;
+  heroBox.style.transform = `scale(${1 + heroOut * 0.06})`;
+  heroBox.style.visibility = heroOut >= 1 ? 'hidden' : 'visible';
+  beatsEl.hero.style.opacity = clamp((now - 0.15) / 0.9) * (1 - smooth(0.02, 0.05, p));
   beatsEl.hero.style.transform = `translateY(${-p * 600}px)`;
 
   stepSplash(dt);
@@ -474,22 +471,23 @@ function frame(ms) {
   }
 
   // --- bean targets ---
-  const cx = MOBILE ? 0 : -W * 0.13, cy = MOBILE ? H * 0.1 : 0;
+  const cx = MOBILE ? 0 : -W * 0.13, cy = CY_OVERRIDE !== null ? H * CY_OVERRIDE : MOBILE ? H * 0.1 : 0;
   NDC.set(mouse.x / innerWidth * 2 - 1, -(mouse.y / innerHeight) * 2 + 1); RAY.setFromCamera(NDC, camera);
   RAY.ray.intersectPlane(PLANE, mouseW);
-  const phinR = rects.phin; const phinW = toWorld(phinR.left + phinR.width / 2, phinR.top + phinR.height * 0.55, PHINW);
+  const phinR = rects.phin; const phinW = toWorld(phinR.left + phinR.width / 2, phinR.top + phinR.height * 0.273, PHINW); // the mouth of the phin (phin2.webp)
+  const phinTopY = (0.5 - phinR.top / innerHeight) * H;
   const visible = PTS && p > T.dat[0] - 0.01 && p < T.pour[1] + 0.01;
   beans.visible = !!visible;
   if (visible) {
-    const digitH = H * (MOBILE ? 0.46 : 0.74);
-    const drumR = Math.min(W, H) * (MOBILE ? 0.32 : 0.3);
+    const digitH = H * (MOBILE ? 0.46 : 0.74) * DS;
+    const drumR = Math.min(W, H) * (MOBILE ? 0.32 : 0.3) * DS;
     for (let i = 0; i < N; i++) {
       const o = i * 3;
       let tx, ty, tz;
       if (p < T.lua[0] + 0.01 && dat < 0.93) {
         // ĐẤT: rise from the soil, staggered, into "1996"
         const s = PTS.y1996[i % PTS.y1996.length], k = smooth(S.delay[i] * 0.3, S.delay[i] * 0.3 + 0.3, dat);
-        const w = MOBILE ? Math.min(H * 0.4, W * 0.85 / 0.95) : H * 0.34;
+        const w = (MOBILE ? Math.min(H * 0.4, W * 0.85 / 0.95) : H * 0.34) * DS;
         tx = lerp((S.delay[i] - 0.5) * W, s[0] * w + (MOBILE ? 0 : -W * 0.13), k); ty = lerp(-H * 0.75, s[1] * w + cy, k); tz = S.dep[i] * 0.3;
       } else if (ri < 0 && p < T.pour[0]) {
         // LỬA: the roaster drum, beans lifted and dropped
@@ -512,9 +510,11 @@ function frame(ms) {
         const s = PTS.d[ready ? ri : Math.max(0, prevRi)][i % PTS.d[ri].length] || PTS.d[ri][i % PTS.d[ri].length];
         tx = cx + s[0] * digitH; ty = cy + s[1] * digitH; tz = S.dep[i] * 0.3;
       } else {
-        // pour: a stream into the phin
+        // pour: an arc that rises past the phin and drops into its mouth (the cup in front hides them)
         const k = smooth(S.delay[i] * 0.55, S.delay[i] * 0.55 + 0.4, pour);
-        tx = lerp(cx + (S.delay[i] - 0.5) * 4, phinW.x, k); ty = lerp(cy, phinW.y, k); tz = 0;
+        const x0 = cx + (S.delay[i] - 0.5) * 4, x1 = phinW.x + (S.delay[i] - 0.5) * 1.4;
+        const qx = (x0 + x1) / 2, qy = phinTopY + 5.5, u = 1 - k;
+        tx = u * u * x0 + 2 * u * k * qx + k * k * x1; ty = u * u * cy + 2 * u * k * qy + k * k * phinW.y; tz = 0;
       }
       S.t[o] = tx; S.t[o + 1] = ty; S.t[o + 2] = tz;
       // cursor pushes beans aside
@@ -592,6 +592,9 @@ function frame(ms) {
   }
 
   // --- stir ---
+  // once the "30" has formed, the real cup comes in as a photo (scrolling back up hides it)
+  if (stir.done) stir.after = (stir.after || 0) + dt;
+  finalEl.classList.toggle('on', stir.done && stir.after > 2.6 && p > 0.9);
   const sOn = smooth(0.0, 0.3, stirP);
   stirMat.uniforms.uOn.value = sOn;
   stirQuad.visible = sOn > 0;
@@ -603,7 +606,7 @@ function frame(ms) {
     stirMat.uniforms.uTime.value = now;
     // nobody stirring for a while (or on a phone): the spoon moves by itself
     stir.idle += dt;
-    if (sOn > 0.8 && (stir.idle > 1.8 || REDUCED) && !stir.done) {
+    if (sOn > 0.8 && (stir.idle > (CAPTURE ? 0.2 : 1.8) || REDUCED) && !stir.done) {
       stir.auto += dt * 2.2;
       const ax = 0.5 + Math.cos(stir.auto) * 0.24, ay = 0.5 + Math.sin(stir.auto) * 0.24;
       stirAt(ax, ay, -Math.sin(stir.auto) * 0.05, Math.cos(stir.auto) * 0.05);
@@ -613,7 +616,7 @@ function frame(ms) {
     [rtA, rtB] = [rtB, rtA];
     stirMat.uniforms.uField.value = rtA.texture;
     simMat.uniforms.uForce.value.multiplyScalar(0.5);
-    if (stir.energy > 5 && !stir.done) { stir.done = true; beatsEl.sua.classList.add('done'); track('stir-30'); }
+    if (stir.energy > (CAPTURE ? 2.4 : 5) && !stir.done) { stir.done = true; beatsEl.sua.classList.add('done'); track('stir-30'); }
     stir.art = clamp(stir.art + (stir.done ? dt / 1.6 : 0));
     stirMat.uniforms.uArtOn.value = smooth(0, 1, stir.art);
   }
@@ -624,7 +627,7 @@ function frame(ms) {
   if (PERF) window.__js.push(performance.now() - t0);
   // keep motion smooth on weak GPUs: trade a little sharpness for frame rate
   fstat.n++; fstat.sum += dt;
-  if (fstat.n >= 45 && !location.search.includes('noadapt')) {
+  if (fstat.n >= 45 && !location.search.includes('noadapt') && !CAPTURE) {
     const avg = fstat.sum / fstat.n * 1000; fstat.n = fstat.sum = 0;
     const next = avg > 21 ? Math.max(0.75, dpr - 0.25) : avg < 15 ? Math.min(DPR_MAX, dpr + 0.25) : dpr;
     if (next !== dpr) { dpr = next; renderer.setPixelRatio(dpr); renderer.setSize(innerWidth, innerHeight, false); window.__dprChanges = (window.__dprChanges || 0) + 1; }

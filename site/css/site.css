@@ -20,13 +20,23 @@ a { color: inherit; }
 #gl { inset: 0; width: 100vw; height: 100vh; z-index: 1; display: block; }
 #flyers { inset: 0; z-index: 2; pointer-events: none; }
 #flyers img { position: absolute; left: 0; top: 0; will-change: transform; }
-#phin { z-index: 2; left: 50%; top: 2vh; width: clamp(110px, 13vw, 190px); transform: translateX(-50%); opacity: 0; pointer-events: none; }
+#phin { z-index: 2; left: 50%; top: 11vh; width: clamp(170px, 19vw, 290px); transform: translateX(-50%); opacity: 0; pointer-events: none; }
 #sachet { z-index: 3; left: 50%; top: 50%; width: clamp(180px, 26vw, 380px); opacity: 0; pointer-events: none; transform: translate(-50%, -50%); }
+
+/* hero: one photo plate, made to breathe by js/hero.js; the <img> paints first */
+#hero { position: fixed; z-index: 0; inset: 0; will-change: opacity, transform; }
+#hero img, #hero canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#hero img { object-fit: cover; object-position: 100% 50%; }
+#hero canvas { opacity: 0; transition: opacity .4s; }
+#hero::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(0deg, var(--bg) 0%, rgba(14,9,7,0) 14%); }
 
 /* copy */
 #copy { inset: 0; z-index: 4; pointer-events: none; }
 .beat { position: absolute; opacity: 0; will-change: opacity, transform; }
-.beat[data-beat="hero"] { left: 0; right: 0; top: 24vh; text-align: center; }
+.beat[data-beat="hero"] { left: var(--gutter); top: 0; bottom: 0; width: min(46vw, 720px); display: flex; flex-direction: column; justify-content: center; text-align: left; }
+.beat[data-beat="hero"] .hint { position: absolute; left: 0; bottom: 6vh; margin: 0 !important; }
+.beat[data-beat="hero"] .mega { font-size: clamp(48px, 6.6vw, 124px); }
 .mega { font: 800 clamp(48px, 8.4vw, 150px)/.92 var(--display); font-variation-settings: 'opsz' 96; letter-spacing: -.035em; margin: 0; }
 .mega span { display: block; }
 .kicker { font: 600 12px/1 var(--body); letter-spacing: .28em; text-transform: uppercase; color: var(--gold); margin: 0 0 18px; }
@@ -79,7 +89,11 @@ a { color: inherit; }
   .side { left: var(--gutter); right: var(--gutter); width: auto; top: auto; bottom: 7vh; transform: none; }
   .side h2 { font-size: 34px; }
   .side p:not(.kicker) { font-size: 15px; }
-  .beat[data-beat="hero"] { top: 20vh; }
+  #hero { left: 0; }
+  #hero img { object-position: 76% 50%; }
+  #hero::after { background: linear-gradient(180deg, rgba(14,9,7,.94) 0%, rgba(14,9,7,.7) 28%, rgba(14,9,7,0) 46%), linear-gradient(0deg, var(--bg) 0%, rgba(14,9,7,0) 14%); }
+  .beat[data-beat="hero"] { left: var(--gutter); right: var(--gutter); width: auto; justify-content: flex-start; padding-top: 13vh; }
+  .beat[data-beat="hero"] .mega { font-size: 52px; }
   .bub { width: 130px; } .bub.big { width: 160px; } .bub span { font-size: 12px; }
   #drip { right: 8px; }
   #scroll-track { height: 1500vh; }
@@ -96,3 +110,9 @@ html.no-gl .beat, html.no-gl .bub { position: static; opacity: 1; transform: non
 #logo .w { font: 800 13px/1 var(--display); letter-spacing: .14em; margin-left: 12px; }
 @media (max-width: 760px) { #logo { top: 16px; } #logo .three { font-size: 26px; } }
 @media (min-width: 761px) { #sachet { left: 27%; top: 46%; } }
+
+/* after the stir: the real cup, in a photo (fades in once the latte art has formed) */
+#final { position: fixed; inset: 0; z-index: 3; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 1.6s ease, visibility 0s 1.6s; }
+#final.on { opacity: 1; visibility: visible; transition: opacity 1.6s ease; }
+#final img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+#final::after { content: ''; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(14,9,7,.92) 0%, rgba(14,9,7,.55) 22%, rgba(14,9,7,0) 46%); }
